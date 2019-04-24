@@ -14,17 +14,17 @@ class GoogleAuth extends React.Component {
         scope: 'email'
       }).then(() => {
         this.auth = window.gapi.auth2.getAuthInstance();
-        this.onAuthChange(this.auth.isSignedIn.get());
+        this.onAuthChange(this.auth.isSignedIn.get()); //here we are passing what will return a boolean to our function
 
-        this.auth.isSignedIn.listen(this.onAuthChange);
+        this.auth.isSignedIn.listen(this.onAuthChange); //listening for changes on auth.isSignedIn object so page doesn't have to reload when change occurs
       })
     });
   }
 
-  //function is invoked by listen function on auth.isSignedIn object, updates status without page reload
+  //function takes in boolean and dispatches to the REDUX action creators
   onAuthChange = (isSignedIn) => {
     if (isSignedIn) {
-      this.props.signIn();
+      this.props.signIn(this.auth.currentUser.get().getId()); //argument here is the Google user ID
     } else {
       this.props.signOut();
     }
@@ -59,7 +59,7 @@ class GoogleAuth extends React.Component {
   }
 
   render() {
-    console.log('Auth props: ', this.props);
+    console.log('GoogleAuth props: ', this.props);
     return (
       <div>{this.renderAuthButton()}</div>
     )
