@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 class StreamCreate extends React.Component {
 
   //to better understand object, remove destructuring and console log formProps
-  renderInput({ input, label }) {
+  renderInput({ input, label, meta }) {
     //console.log(formProps);
 
     // return <input onChange={formProps.input.onChange} value={formProps.input.value}/>
@@ -13,6 +13,7 @@ class StreamCreate extends React.Component {
       <div className="field">
         <label>{label}</label>
         <input {...input} /> {/* destructured formProps argument */}
+        <div>{meta.error}</div>
       </div>
     )
   }
@@ -32,6 +33,21 @@ class StreamCreate extends React.Component {
   }
 }
 
+const validate = (formValues) => {
+  const errors = {};
+
+  if (!formValues.title) {
+    errors.title = 'You must enter a title';
+  }
+
+  if (!formValues.description) {
+    errors.description = 'You must enter a description';
+  }
+
+  return errors;
+};
+
 export default reduxForm({
-  form: 'StreamCreate'
+  form: 'StreamCreate',
+  validate: validate
 })(StreamCreate);
